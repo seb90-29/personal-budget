@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 const envelopeRouter = require('./envelopeRouter.js')
-app.use('/api', envelopeRouter);
+app.use('/', envelopeRouter);
 
 const PORT = process.env.PORT || 3000;
 
