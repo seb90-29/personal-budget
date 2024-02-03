@@ -7,7 +7,8 @@ const {
   remainingBudget,
   getEnvelopeById,
   getEnvelopes,
-  addNewEnvelope
+  addNewEnvelope,
+  addNewExpense
 } = require('./data.js')
 envelopeRouter.use(bodyParser.json())
 
@@ -29,11 +30,20 @@ envelopeRouter.get('/envelopes/:id', (req, res, next) => {
     }
 })
 
+//POST new envelope
 envelopeRouter.post('/envelopes/new-envelope', (req, res, next) => {
   const body = req.body
-  const addedEnvelope = addNewEnvelope(body.category, body.budget)
+  const addEnvelope = addNewEnvelope(body.category, body.budget)
 
-  res.status(201).send(addedEnvelope);
+  res.status(201).send(addEnvelope);
 })
 
+//POST new expense
+envelopeRouter.post('/envelopes/new-expense/:id', (req, res, next) => {
+  const id = parseInt(req.params.id)
+  const body = req.body
+  const addExpense = addNewExpense(id, body.name, body.value)
+
+  res.sendStatus(201);
+})
 module.exports = envelopeRouter;
