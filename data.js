@@ -1,12 +1,11 @@
 let startingBalance = 0;
-let totalBudget = 0;
 let remainingBudget = 0;
 
 let envelopes = [
     {
         id: 1,
         category: "Groceries",
-        budget: 0,
+        budget: 10000,
         remaining: 0,
         expenses: [
             {
@@ -18,11 +17,20 @@ let envelopes = [
     {
         id: 2,
         category: "Fuel",
-        budget: 0,
+        budget: 15000,
         remaining: 0,
         expenses: []
     }, 
 ]
+
+//Total budget
+const getTotalBudget = () =>{
+    let envTotal = 0;
+    for (let i = 0; i < envelopes.length; i++){
+        envTotal += envelopes[i].budget
+    }
+    return envTotal
+}
 
 //helper For All
 const getEnvelopes = () =>{
@@ -161,13 +169,34 @@ const updateEnvelopeById = (id, category, budget) => {
         return envelopes[index];  
 }
 
-//console.log(envelopes[0].category)
-//console.log(envelopes[envelopes.length-1])
+//Remaining budget
+const getRemainingBudget = (id) =>{
+    const index = getIndexById(id)
+    const envBudget = envelopes[index].budget
+    const exp = envelopes[index].expenses
+    let sum = 0
+    if (index === -1 || index === 'undefined' || envBudget === 'undefined') {
+        const error = new Error("Envelope ID does not exist.")
+        error.status = 404;
+        throw error;
+    }
+    if (!exp) {
+        exp = envBudget
+        return exp
+    }
+    else{
+        result = 0
+        for(let i = 0; i < exp.length; i++){
+            result += exp[i].value
+        }
+        sum = envBudget - result
+        return sum
+    }
+}
 
 module.exports = {
     envelopes,
     startingBalance,
-    totalBudget,
     remainingBudget,
     getEnvelopeById,
     getEnvelopes,
@@ -175,5 +204,7 @@ module.exports = {
     addNewExpense,
     deleteEnvelopeById,
     deleteExpenseById,
-    updateEnvelopeById
+    updateEnvelopeById,
+    getTotalBudget,
+    getRemainingBudget
 };
