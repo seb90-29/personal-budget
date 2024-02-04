@@ -2,7 +2,7 @@ let startingBalance = 0;
 let totalBudget = 0;
 let remainingBudget = 0;
 
-const envelopes = [
+let envelopes = [
     {
         id: 1,
         category: "Groceries",
@@ -14,15 +14,14 @@ const envelopes = [
                 value: 50
             }
         ]
-    },
-
+    }, 
     {
         id: 2,
         category: "Fuel",
         budget: 0,
         remaining: 0,
         expenses: []
-    }
+    }, 
 ]
 
 //Helper for all
@@ -115,6 +114,17 @@ const addNewExpense = (id, name, value) => {
         expensesPath.push(expenseToPush)
         return expensesPath.length-1
 }
+
+//Delete envelope
+const deleteEnvelopeById = (id) => {
+    const idNumber = getIndexById(id);
+    if (idNumber === -1){
+        return false
+    }
+    envelopes.splice(idNumber, 1);
+    return true;
+}
+
 //console.log(envelopes[0].expenses)
 //console.log(envelopes[envelopes.length-1])
 
@@ -126,5 +136,6 @@ module.exports = {
     getEnvelopeById,
     getEnvelopes,
     addNewEnvelope,
-    addNewExpense
+    addNewExpense,
+    deleteEnvelopeById
 };

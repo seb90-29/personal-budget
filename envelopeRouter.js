@@ -8,7 +8,8 @@ const {
   getEnvelopeById,
   getEnvelopes,
   addNewEnvelope,
-  addNewExpense
+  addNewExpense,
+  deleteEnvelopeById
 } = require('./data.js')
 envelopeRouter.use(bodyParser.json())
 
@@ -24,7 +25,7 @@ envelopeRouter.get('/envelopes/:id', (req, res, next) => {
     const envelope = getEnvelopeById(id)
   
     if (envelope === -1){
-      res.status(404).send('Envelope ID not found!');
+      res.status(404).send('Envelope ID not found!')
     } else{
       res.send(envelope);
     }
@@ -35,7 +36,7 @@ envelopeRouter.post('/envelopes/new-envelope', (req, res, next) => {
   const body = req.body
   const addEnvelope = addNewEnvelope(body.category, body.budget)
 
-  res.status(201).send(addEnvelope);
+  res.status(201).send(addEnvelope)
 })
 
 //POST new expense
@@ -46,4 +47,17 @@ envelopeRouter.post('/envelopes/new-expense/:id', (req, res, next) => {
 
   res.sendStatus(201);
 })
+
+//DELETE envelope
+envelopeRouter.delete('/envelopes/:id', (req, res, next) => {
+  const id = parseInt(req.params.id)
+  const deleted = deleteEnvelopeById(id)
+  if (deleted){
+    res.status(204).send();
+  } else{
+    res.status(404).send("Envelope is nonexistent");
+  }
+})
+
+
 module.exports = envelopeRouter;
