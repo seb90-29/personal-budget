@@ -1,6 +1,6 @@
 const express = require('express')
 const envelopeRouter = express.Router()
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser')
 const {
   startingBalance,
   totalBudget,
@@ -9,7 +9,8 @@ const {
   getEnvelopes,
   addNewEnvelope,
   addNewExpense,
-  deleteEnvelopeById
+  deleteEnvelopeById,
+  deleteExpenseById
 } = require('./data.js')
 envelopeRouter.use(bodyParser.json())
 
@@ -27,7 +28,7 @@ envelopeRouter.get('/envelopes/:id', (req, res, next) => {
     if (envelope === -1){
       res.status(404).send('Envelope ID not found!')
     } else{
-      res.send(envelope);
+      res.send(envelope)
     }
 })
 
@@ -53,9 +54,20 @@ envelopeRouter.delete('/envelopes/:id', (req, res, next) => {
   const id = parseInt(req.params.id)
   const deleted = deleteEnvelopeById(id)
   if (deleted){
-    res.status(204).send();
+    res.status(204).send("Envelope is terminated.")
   } else{
-    res.status(404).send("Envelope is nonexistent");
+    res.status(404).send("Envelope is nonexistent")
+  }
+})
+
+//DELETE last expense
+envelopeRouter.delete('/envelopes/expenses/:id', (req, res, next) => {
+  const id = parseInt(req.params.id)
+  const removed = deleteExpenseById(id)
+  if (removed){
+    res.status(204).send("Last expense is terminated.")
+  } else{
+    res.status(404).send("No expenses are listed.")
   }
 })
 

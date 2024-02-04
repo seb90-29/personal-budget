@@ -24,11 +24,11 @@ let envelopes = [
     }, 
 ]
 
-//Helper for all
+//helper For All
 const getEnvelopes = () =>{
     return envelopes
 }
-//Helper for one
+//helper For One
 const getEnvelopeById = (id) => {
     const idNo = id -1
     if(typeof idNo === 'number' && id <= envelopes.length) {
@@ -39,7 +39,7 @@ const getEnvelopeById = (id) => {
     }
 }
 
-//Index Helper
+//index Helper
 const getIndexById = (id) => {
     for (let i=0; i<envelopes.length; i++){
         if (envelopes[i].id === id){
@@ -93,12 +93,12 @@ const addNewExpense = (id, name, value) => {
     const indexId = getIndexById(id)  
     const expensesPath = envelopes[indexId].expenses
     if(typeof id !== 'number' || typeof name !== 'string' || typeof value !== 'number'){
-        const error = new Error('Provided values are incorrect.');
+        const error = new Error('Provided values are incorrect.')
         error.status = 400;
         throw error;
     }
     if(indexId === -1){
-        const error = new Error('ID does not exist.');
+        const error = new Error('ID does not exist.')
         error.status = 400;
         throw error;
     }
@@ -117,11 +117,21 @@ const addNewExpense = (id, name, value) => {
 
 //Delete envelope
 const deleteEnvelopeById = (id) => {
-    const idNumber = getIndexById(id);
+    const idNumber = getIndexById(id)
     if (idNumber === -1){
         return false
     }
-    envelopes.splice(idNumber, 1);
+    envelopes.splice(idNumber, 1)
+    return true;
+}
+
+//Delete last expense
+const deleteExpenseById = (id) => {
+    const expense = envelopes[getIndexById(id)].expenses
+    if (expense.length === -1){
+        return false
+    }
+    expense.splice(expense.length-1, 1)
     return true;
 }
 
@@ -137,5 +147,6 @@ module.exports = {
     getEnvelopes,
     addNewEnvelope,
     addNewExpense,
-    deleteEnvelopeById
+    deleteEnvelopeById,
+    deleteExpenseById
 };
