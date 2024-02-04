@@ -10,7 +10,8 @@ const {
   addNewEnvelope,
   addNewExpense,
   deleteEnvelopeById,
-  deleteExpenseById
+  deleteExpenseById,
+  updateEnvelopeById
 } = require('./data.js')
 envelopeRouter.use(bodyParser.json())
 
@@ -24,7 +25,6 @@ envelopeRouter.get('/envelopes', (req, res) => {
 envelopeRouter.get('/envelopes/:id', (req, res, next) => {
     const id = parseInt(req.params.id)
     const envelope = getEnvelopeById(id)
-  
     if (envelope === -1){
       res.status(404).send('Envelope ID not found!')
     } else{
@@ -71,5 +71,12 @@ envelopeRouter.delete('/envelopes/expenses/:id', (req, res, next) => {
   }
 })
 
+//Update envelope
+envelopeRouter.put('/envelopes/update/:id', (req, res, next) => {
+  const id = parseInt(req.params.id);
+  const body = req.body;
+  const updatedEnvelope = updateEnvelopeById(id, body.category, body.budget);
+  res.status(201).send(updatedEnvelope);
+})
 
 module.exports = envelopeRouter;

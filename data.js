@@ -98,7 +98,7 @@ const addNewExpense = (id, name, value) => {
         throw error;
     }
     if(indexId === -1){
-        const error = new Error('ID does not exist.')
+        const error = new Error('Envelope ID does not exist.')
         error.status = 400;
         throw error;
     }
@@ -135,7 +135,33 @@ const deleteExpenseById = (id) => {
     return true;
 }
 
-//console.log(envelopes[0].expenses)
+//Update envelope
+const updateEnvelopeById = (id, category, budget) => {
+    if(typeof id !== 'number' || typeof category !== 'string' || typeof budget !== 'number'){
+        const error = new Error('Provided values are incorrect.')
+        error.status = 400;
+        throw error;
+    }
+    if(budget < 0){
+        const error = new Error('Negative budget is not allowed.')
+        error.status = 400;
+        throw error;
+    }
+    const index = getIndexById(id);
+    if (index === -1){
+        const error = new Error('Envelope ID not found!')
+        error.status = 404;
+        throw error;
+    }
+        envelopes[index].id = id;
+        envelopes[index].category = category;
+        envelopes[index].budget = budget;
+        envelopes[index].remaining = envelopes[index].remaining
+        envelopes[index].expenses = envelopes[index].expenses
+        return envelopes[index];  
+}
+
+//console.log(envelopes[0].category)
 //console.log(envelopes[envelopes.length-1])
 
 module.exports = {
@@ -148,5 +174,6 @@ module.exports = {
     addNewEnvelope,
     addNewExpense,
     deleteEnvelopeById,
-    deleteExpenseById
+    deleteExpenseById,
+    updateEnvelopeById
 };
