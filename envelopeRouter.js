@@ -2,8 +2,6 @@ const express = require('express')
 const envelopeRouter = express.Router()
 const bodyParser = require('body-parser')
 const {
-  startingBalance,
-  remainingBudget,
   getEnvelopeById,
   getEnvelopes,
   addNewEnvelope,
@@ -12,9 +10,16 @@ const {
   deleteExpenseById,
   updateEnvelopeById,
   getTotalBudget,
-  getRemainingBudget
-} = require('./data.js')
+  getRemainingBudget,
+  totalRemaining
+} = require('./utils.js')
 envelopeRouter.use(bodyParser.json())
+
+//GET total remaining
+envelopeRouter.get('/envelopes/budget/remaining', (req, res) => {
+  const tRemaining = "Total remaining budget in your envelopes: " + totalRemaining()
+  res.send(tRemaining)
+})
 
 //GET total budget
 envelopeRouter.get('/envelopes/budget', (req, res) => {
@@ -26,7 +31,7 @@ envelopeRouter.get('/envelopes/budget', (req, res) => {
 envelopeRouter.get('/envelopes/budget/:id', (req, res) => {
   const id = parseInt(req.params.id)
   const remaining = "Remining budget in requested envelope: "+ getRemainingBudget(id)
-  res.send(remaining)
+    res.status(200).send(remaining)
 })
 
 //GET all
