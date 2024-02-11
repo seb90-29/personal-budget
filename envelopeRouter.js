@@ -17,8 +17,8 @@ envelopeRouter.use(bodyParser.json())
 
 //GET total remaining
 envelopeRouter.get('/envelopes/budget/remaining', (req, res) => {
-  const tRemaining = "Total remaining budget in your envelopes: " + totalRemaining()
-  res.send(tRemaining)
+  const totalRemainingBudget = "Total remaining budget in your envelopes: " + totalRemaining()
+  res.send(totalRemainingBudget)
 })
 
 //GET total budget
@@ -30,9 +30,12 @@ envelopeRouter.get('/envelopes/budget', (req, res) => {
 //GET remaining budget
 envelopeRouter.get('/envelopes/budget/:id', (req, res) => {
   const id = parseInt(req.params.id)
-  const remaining = "Remining budget in requested envelope: "+ getRemainingBudget(id)
-    res.status(200).send(remaining)
-})
+  if (typeof id !== 'number') {
+    res.status(400).send('ID has to be a number.')
+  }else{
+  const envelopeRemainingBudget = "Remining budget in requested envelope: "+ getRemainingBudget(id)
+    res.status(200).send(envelopeRemainingBudget)
+}})
 
 //GET all
 envelopeRouter.get('/envelopes', (req, res) => {
@@ -43,13 +46,16 @@ envelopeRouter.get('/envelopes', (req, res) => {
 //GET one
 envelopeRouter.get('/envelopes/:id', (req, res, next) => {
     const id = parseInt(req.params.id)
+    if (typeof id !== 'number') {
+      res.status(400).send('ID has to be a number.')
+    }else{
     const envelope = getEnvelopeById(id)
     if (envelope === -1){
       res.status(404).send('Envelope ID not found!')
     } else{
       res.send(envelope)
     }
-})
+}})
 
 //POST new envelope
 envelopeRouter.post('/envelopes/new-envelope', (req, res, next) => {
@@ -62,11 +68,14 @@ envelopeRouter.post('/envelopes/new-envelope', (req, res, next) => {
 //POST new expense
 envelopeRouter.post('/envelopes/new-expense/:id', (req, res, next) => {
   const id = parseInt(req.params.id)
+  if (typeof id !== 'number') {
+    res.status(400).send('ID has to be a number.')
+  }else{
   const body = req.body
   const addExpense = addNewExpense(id, body.name, body.value)
 
   res.sendStatus(201);
-})
+}})
 
 //DELETE envelope
 envelopeRouter.delete('/envelopes/:id', (req, res, next) => {
@@ -85,6 +94,7 @@ envelopeRouter.delete('/envelopes/expenses/:id', (req, res, next) => {
   if (typeof id !== 'number') {
     res.status(400).send('ID has to be a number.')
   }else{
+
   const lastExpenseRemoved = deleteExpenseById(id)
   if (lastExpenseRemoved){
     res.status(204).send("Last expense is terminated.")
@@ -96,9 +106,12 @@ envelopeRouter.delete('/envelopes/expenses/:id', (req, res, next) => {
 //Update envelope
 envelopeRouter.put('/envelopes/update/:id', (req, res, next) => {
   const id = parseInt(req.params.id);
+  if (typeof id !== 'number') {
+    res.status(400).send('ID has to be a number.')
+  }else{
   const body = req.body;
   const updatedEnvelope = updateEnvelopeById(id, body.category, body.budget);
   res.status(201).send(updatedEnvelope);
-})
+}})
 
 module.exports = envelopeRouter;
