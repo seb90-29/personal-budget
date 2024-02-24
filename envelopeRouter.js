@@ -13,6 +13,19 @@ const {
   getRemainingBudget,
   totalRemaining
 } = require('./utils.js')
+
+const pool = require('./databasepg.js')
+
+  envelopeRouter.get('/envelopes/budget/unenvelopedMoney', async (req, res) => {
+    try {
+      const result = await pool.query('SELECT SUM(value) FROM unenveloped_money');
+      res.json(result.rows);
+    } catch (err) {
+      console.error(err);
+      res.status(404).send('Table does not exist.');
+    }
+  });
+
 envelopeRouter.use(bodyParser.json())
 
 //GET total remaining
