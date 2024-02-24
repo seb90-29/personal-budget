@@ -93,16 +93,13 @@ envelopeRouter.post('/envelopes/new-expense/:id', (req, res, next) => {
 //DELETE envelope
 envelopeRouter.delete('/envelopes/:id', (req, res, next) => {
   const id = parseInt(req.params.id)
-  if (typeof id !== 'number') {
-    res.status(400).send('ID has to be a number.')
-  }else{
-  const deleted = deleteEnvelopeById(id)
-  if (deleted){
+  const deleteEnvelope = deleteEnvelopeById(id)
+  if (deleteEnvelope){
     res.status(204).send("Envelope is terminated.")
   } else{
     res.status(404).send("Envelope is nonexistent")
   }
-}})
+})
 
 //DELETE last expense
 envelopeRouter.delete('/envelopes/expenses/:id', (req, res, next) => {
@@ -110,13 +107,14 @@ envelopeRouter.delete('/envelopes/expenses/:id', (req, res, next) => {
   if (typeof id !== 'number') {
     res.status(400).send('ID has to be a number.')
   }else{
-  const removed = deleteExpenseById(id)
-  if (removed){
+
+  const lastExpenseRemoved = deleteExpenseById(id)
+  if (lastExpenseRemoved){
     res.status(204).send("Last expense is terminated.")
   } else{
     res.status(404).send("No expenses are listed.")
-  }
-}})
+  }}
+})
 
 //Update envelope
 envelopeRouter.put('/envelopes/update/:id', (req, res, next) => {
